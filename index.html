@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frontera de Posibilidades de Producción</title>
+    <style>
+        * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.slide-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 30px 0;
+}
+
+.slide {
+    display: none;
+    width: 90%;
+    max-width: 1200px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    padding: 60px;
+    animation: fadeIn 0.5s ease-in;
+    position: relative;
+    overflow-y: visible;
+}
+
+.slide.active {
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TIPOGRAFÍA Y TEXTOS --- */
+h1 {
+    color: #667eea;
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+h2 {
+    color: #764ba2;
+    font-size: 2.3em;
+    margin-bottom: 25px;
+    border-bottom: 4px solid #667eea;
+    padding-bottom: 10px;
+}
+
+h3 {
+    color: #667eea;
+    font-size: 1.6em;
+    margin: 20px 0 10px 0;
+}
+
+p, li {
+    font-size: 1.2em;
+    line-height: 1.8;
+    color: #333;
+    margin-bottom: 15px;
+}
+
+ul {
+    margin-left: 35px;
+}
+
+/* --- TABLAS --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 1.1em;
+    overflow-x: auto;
+    display: block;
+}
+
+th {
+    background: #667eea;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+td {
+    padding: 12px;
+    text-align: center;
+    border: 2px solid #ddd;
+}
+
+tr:nth-child(even) {
+    background: #f8f9ff;
+}
+
+/* --- BOTONES Y CONTROLES --- */
+.controls {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+button {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    font-size: 1.1em;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+button:hover {
+    background: #764ba2;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+}
+
+/* --- DETALLES --- */
+.slide-number {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: #667eea;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-size: 1.1em;
+}
+
+.team {
+    text-align: center;
+    color: #666;
+    font-size: 1.1em;
+    margin-top: 20px;
+}
+
+.highlight {
+    background: #fff3cd;
+    padding: 20px;
+    border-left: 5px solid #ffc107;
+    margin: 20px 0;
+    border-radius: 5px;
+}
+
+.graph-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 30px 0;
+    overflow-x: auto;
+}
+
+svg {
+    max-width: 100%;
+    height: auto;
+}
+
+.point {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.point:hover {
+    r: 10;
+}
+
+.emphasis {
+    color: #764ba2;
+    font-weight: bold;
+}
+
+.formula {
+    background: #e8eaf6;
+    padding: 15px;
+    border-radius: 10px;
+    font-family: 'Courier New', monospace;
+    font-size: 1.1em;
+    text-align: center;
+    margin: 20px 0;
+}
+
+/* ---------------------------- */
+/* --- RESPONSIVE MEJORADO --- */
+/* ---------------------------- */
+
+/* Tablets */
+@media (max-width: 1024px) {
+    .slide {
+        width: 95%;
+        padding: 40px;
+    }
+
+    h1 { font-size: 2.4em; }
+    h2 { font-size: 1.9em; }
+    p, li { font-size: 1.05em; }
+}
+
+/* Celulares grandes y medianos */
+@media (max-width: 768px) {
+    .slide {
+        width: 100%;
+        padding: 30px 20px;
+        border-radius: 0;
+    }
+
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.6em; }
+    h3 { font-size: 1.3em; }
+    p, li { font-size: 1em; }
+
+    table {
+        font-size: 0.95em;
+        overflow-x: auto;
+    }
+
+    .controls {
+        position: static;
+        margin-top: 20px;
+        justify-content: center;
+    }
+
+    button {
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+}
+
+/* Celulares pequeños */
+@media (max-width: 480px) {
+    .slide {
+        padding: 20px 15px;
+    }
+
+    h1 { font-size: 1.6em; }
+    h2 { font-size: 1.3em; }
+    h3 { font-size: 1.1em; }
+    p, li { font-size: 0.9em; }
+
+    button {
+        width: 100%;
+        border-radius: 30px;
+    }
+
+    .slide-number {
+        top: 10px;
+        right: 10px;
+        font-size: 0.8em;
+        padding: 6px 10px;
+    }
+
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+        font-size: 0.85em;
+    }
+}
+
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- DIAPOSITIVA 1: PORTADA -->
+        <div class="slide active">
+            <div class="slide-number">1/10</div>
+            <h1>Frontera de Posibilidades de Producción</h1>
+            <h3 style="text-align: center; color: #764ba2; margin-top: 40px;">Caso Práctico: GameStyle MX</h3>
+            <div style="text-align: center; margin-top: 60px;">
+                <p style="font-size: 1.8em; color: #667eea;">Economía Pública y Social</p>
+            </div>
+            <div class="team">
+                <p><strong>Equipo:</strong></p>
+                <p>Joshua • Irvin • Yordi • Donovan • Alan</p>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 2: PREGUNTA DETONANTE -->
+        <div class="slide">
+            <div class="slide-number">2/10</div>
+            <h2>¿Alguna vez has tenido que elegir?</h2>
+            <div style="text-align: center; margin-top: 80px;">
+                <p style="font-size: 2em; color: #667eea; margin: 40px 0;">💰 ¿Tenis nuevos o videojuego?</p>
+                <p style="font-size: 2em; color: #764ba2; margin: 40px 0;">🎉 ¿Salir con amigos o ahorrar?</p>
+                <p style="font-size: 2em; color: #667eea; margin: 40px 0;">📱 ¿Celular o viaje?</p>
+            </div>
+            <div class="highlight" style="margin-top: 60px;">
+                <p style="font-size: 1.5em; text-align: center;">
+                    <strong>Esto es el problema económico fundamental:</strong><br>
+                    Recursos limitados, necesidades ilimitadas
+                </p>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 3: CASO PRÁCTICO -->
+        <div class="slide">
+            <div class="slide-number">3/10</div>
+            <h2>Caso: GameStyle MX</h2>
+            <p><strong>Empresa local de Tizayuca</strong></p>
+            <h3>Productos que fabrica:</h3>
+            <ul>
+                <li>🎽 <strong>Playeras personalizadas</strong> (diseños de videojuegos, anime)</li>
+                <li>🎮 <strong>Accesorios gaming</strong> (mousepads, fundas para celular)</li>
+            </ul>
+            <h3>Recursos disponibles:</h3>
+            <ul>
+                <li>👥 5 trabajadores</li>
+                <li>🏭 1 taller equipado (máquinas de serigrafía y cortadoras láser)</li>
+                <li>💵 Presupuesto fijo semanal para materiales</li>
+                <li>⏰ 40 horas laborales por semana</li>
+            </ul>
+            <div class="highlight" style="margin-top: 30px;">
+                <p style="text-align: center; font-size: 1.4em;">
+                    <strong>Pregunta clave:</strong> ¿Cómo debe distribuir sus recursos?
+                </p>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 4: TABLA DE OPCIONES -->
+        <div class="slide">
+            <div class="slide-number">4/10</div>
+            <h2>Opciones de Producción</h2>
+            <p>Cuando la empresa usa el <span class="emphasis">100% de su capacidad</span>, puede elegir entre:</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Opción</th>
+                        <th>Playeras</th>
+                        <th>Accesorios</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>A</strong></td>
+                        <td>0</td>
+                        <td>200</td>
+                    </tr>
+                    <tr>
+                        <td><strong>B</strong></td>
+                        <td>25</td>
+                        <td>175</td>
+                    </tr>
+                    <tr>
+                        <td><strong>C</strong></td>
+                        <td>45</td>
+                        <td>135</td>
+                    </tr>
+                    <tr>
+                        <td><strong>D</strong></td>
+                        <td>60</td>
+                        <td>80</td>
+                    </tr>
+                    <tr>
+                        <td><strong>E</strong></td>
+                        <td>70</td>
+                        <td>30</td>
+                    </tr>
+                    <tr>
+                        <td><strong>F</strong></td>
+                        <td>75</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center; margin-top: 20px; font-size: 1.3em;">
+                <strong>Conclusión:</strong> No puede producir cantidades ilimitadas de ambos
+            </p>
+        </div>
+
+        <!-- DIAPOSITIVA 5: GRÁFICA FPP -->
+        <div class="slide">
+            <div class="slide-number">5/10</div>
+            <h2>Gráfica de la FPP</h2>
+            <div class="graph-container">
+                <svg width="700" height="500" viewBox="0 0 700 500">
+                    <!-- Ejes -->
+                    <line x1="80" y1="420" x2="650" y2="420" stroke="#333" stroke-width="3"/>
+                    <line x1="80" y1="420" x2="80" y2="30" stroke="#333" stroke-width="3"/>
+                    
+                    <!-- Flechas -->
+                    <polygon points="650,420 640,415 640,425" fill="#333"/>
+                    <polygon points="80,30 75,40 85,40" fill="#333"/>
+                    
+                    <!-- Labels ejes -->
+                    <text x="380" y="460" font-size="20" font-weight="bold" fill="#667eea" text-anchor="middle">Playeras</text>
+                    <text x="30" y="230" font-size="20" font-weight="bold" fill="#667eea" text-anchor="middle" transform="rotate(-90 30 230)">Accesorios</text>
+                    
+                    <!-- Escala X -->
+                    <text x="80" y="445" font-size="16" text-anchor="middle">0</text>
+                    <text x="205" y="445" font-size="16" text-anchor="middle">25</text>
+                    <text x="315" y="445" font-size="16" text-anchor="middle">45</text>
+                    <text x="415" y="445" font-size="16" text-anchor="middle">60</text>
+                    <text x="505" y="445" font-size="16" text-anchor="middle">70</text>
+                    <text x="585" y="445" font-size="16" text-anchor="middle">75</text>
+                    
+                    <!-- Escala Y -->
+                    <text x="60" y="425" font-size="16" text-anchor="end">0</text>
+                    <text x="60" y="355" font-size="16" text-anchor="end">30</text>
+                    <text x="60" y="275" font-size="16" text-anchor="end">80</text>
+                    <text x="60" y="195" font-size="16" text-anchor="end">135</text>
+                    <text x="60" y="130" font-size="16" text-anchor="end">175</text>
+                    <text x="60" y="70" font-size="16" text-anchor="end">200</text>
+                    
+                    <!-- Curva FPP -->
+                    <path d="M 80 60 Q 150 80, 205 130 Q 260 180, 315 195 Q 370 210, 415 275 Q 460 340, 505 355 Q 540 370, 585 420" 
+                          fill="none" stroke="#764ba2" stroke-width="4"/>
+                    
+                    <!-- Puntos -->
+                    <circle cx="80" cy="60" r="8" fill="#667eea" class="point"/>
+                    <text x="65" y="50" font-size="18" font-weight="bold" fill="#667eea">A</text>
+                    
+                    <circle cx="205" cy="130" r="8" fill="#667eea" class="point"/>
+                    <text x="190" y="120" font-size="18" font-weight="bold" fill="#667eea">B</text>
+                    
+                    <circle cx="315" cy="195" r="8" fill="#667eea" class="point"/>
+                    <text x="300" y="185" font-size="18" font-weight="bold" fill="#667eea">C</text>
+                    
+                    <circle cx="415" cy="275" r="8" fill="#667eea" class="point"/>
+                    <text x="400" y="265" font-size="18" font-weight="bold" fill="#667eea">D</text>
+                    
+                    <circle cx="505" cy="355" r="8" fill="#667eea" class="point"/>
+                    <text x="490" y="345" font-size="18" font-weight="bold" fill="#667eea">E</text>
+                    
+                    <circle cx="585" cy="420" r="8" fill="#667eea" class="point"/>
+                    <text x="595" y="415" font-size="18" font-weight="bold" fill="#667eea">F</text>
+                </svg>
+            </div>
+            <p style="text-align: center; font-size: 1.3em;">
+                La curva es <span class="emphasis">convexa</span> (curvada hacia afuera)
+            </p>
+        </div>
+
+        <!-- DIAPOSITIVA 6: COSTE DE OPORTUNIDAD -->
+        <div class="slide">
+            <div class="slide-number">6/10</div>
+            <h2>Coste de Oportunidad</h2>
+            <div class="highlight">
+                <p style="font-size: 1.5em; text-align: center;">
+                    <strong>Definición:</strong> Lo que sacrificamos cuando tomamos una decisión
+                </p>
+            </div>
+            <h3>Cálculo de costes:</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Transición</th>
+                        <th>Playeras ganadas</th>
+                        <th>Accesorios perdidos</th>
+                        <th>Coste de oportunidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>A → B</td>
+                        <td>25</td>
+                        <td>25</td>
+                        <td>25 accesorios</td>
+                    </tr>
+                    <tr>
+                        <td>B → C</td>
+                        <td>20</td>
+                        <td>40</td>
+                        <td>40 accesorios</td>
+                    </tr>
+                    <tr>
+                        <td>C → D</td>
+                        <td>15</td>
+                        <td>55</td>
+                        <td>55 accesorios</td>
+                    </tr>
+                    <tr>
+                        <td>D → E</td>
+                        <td>10</td>
+                        <td>50</td>
+                        <td>50 accesorios</td>
+                    </tr>
+                    <tr>
+                        <td>E → F</td>
+                        <td>5</td>
+                        <td>30</td>
+                        <td>30 accesorios</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p style="text-align: center; margin-top: 20px; font-size: 1.3em;">
+                <strong>Patrón:</strong> <span class="emphasis">25, 40, 55, 50, 30</span>
+            </p>
+        </div>
+
+        <!-- DIAPOSITIVA 7: TIPOS DE PUNTOS -->
+        <div class="slide">
+            <div class="slide-number">7/10</div>
+            <h2>Tipos de Puntos en la FPP</h2>
+            
+            <h3>✅ Sobre la curva: EFICIENCIA MÁXIMA</h3>
+            <ul>
+                <li>100% de recursos utilizados</li>
+                <li>Todos los trabajadores ocupados</li>
+                <li>Sin desperdicios</li>
+                <li><strong>Ejemplo:</strong> Opción C (45 playeras, 135 accesorios)</li>
+            </ul>
+
+            <h3>⚠️ Dentro de la curva: INEFICIENCIA</h3>
+            <ul>
+                <li>Recursos desperdiciados o mal usados</li>
+                <li>Trabajadores ausentes, máquinas rotas</li>
+                <li>Mala organización</li>
+                <li><strong>Ejemplo:</strong> 30 playeras y 80 accesorios</li>
+            </ul>
+
+            <h3>❌ Fuera de la curva: IMPOSIBLE</h3>
+            <ul>
+                <li>Inalcanzable con recursos actuales</li>
+                <li>Necesita más trabajadores o máquinas</li>
+                <li><strong>Ejemplo:</strong> 80 playeras y 180 accesorios</li>
+            </ul>
+        </div>
+
+        <!-- DIAPOSITIVA 8: DESPLAZAMIENTOS -->
+        <div class="slide">
+            <div class="slide-number">8/10</div>
+            <h2>Desplazamientos de la FPP</h2>
+            
+            <h3>📈 Hacia la derecha: CRECIMIENTO</h3>
+            <p><strong>La FPP se expande cuando:</strong></p>
+            <ul>
+                <li>Se contratan más trabajadores</li>
+                <li>Se compran nuevas máquinas</li>
+                <li>Los trabajadores reciben capacitación</li>
+                <li>Se amplía el taller</li>
+            </ul>
+            <div class="highlight">
+                <p style="text-align: center;">Puntos antes imposibles ahora son alcanzables</p>
+            </div>
+
+            <h3>📉 Hacia la izquierda: CONTRACCIÓN</h3>
+            <p><strong>La FPP se reduce cuando:</strong></p>
+            <ul>
+                <li>Trabajadores renuncian</li>
+                <li>Máquinas se descomponen</li>
+                <li>Materiales suben de precio</li>
+                <li>Se reducen horas de trabajo</li>
+            </ul>
+            <div class="highlight">
+                <p style="text-align: center;">La capacidad productiva disminuye</p>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 9: CONCLUSIONES -->
+        <div class="slide">
+            <div class="slide-number">9/10</div>
+            <h2>Conclusiones</h2>
+            
+            <div class="highlight">
+                <h3>1️⃣ Los recursos son limitados</h3>
+                <p>La empresa no puede producir cantidades ilimitadas. Debe elegir.</p>
+            </div>
+
+            <div class="highlight">
+                <h3>2️⃣ Toda elección tiene un costo</h3>
+                <p>El coste de oportunidad es real. Producir más playeras significa renunciar a accesorios.</p>
+            </div>
+
+            <div class="highlight">
+                <h3>3️⃣ La eficiencia es importante</h3>
+                <p>Los puntos sobre la FPP muestran el uso correcto de recursos.</p>
+            </div>
+
+            <div class="highlight">
+                <h3>4️⃣ Los recursos pueden aumentar</h3>
+                <p>Con inversión, la frontera se mueve hacia afuera y se puede producir más.</p>
+            </div>
+        </div>
+
+        <!-- DIAPOSITIVA 10: CIERRE -->
+        <div class="slide">
+            <div class="slide-number">10/10</div>
+            <h1>¿Preguntas?</h1>
+            <div style="text-align: center; margin-top: 100px;">
+                <p style="font-size: 2em; color: #667eea; margin: 40px 0;">
+                    La FPP aplica a toda decisión económica
+                </p>
+                <p style="font-size: 1.5em; color: #666;">
+                    Empresas • Gobiernos • Personas
+                </p>
+            </div>
+            <div class="team" style="margin-top: 100px;">
+                <p style="font-size: 1.5em;"><strong>Gracias por su atención</strong></p>
+                <p style="margin-top: 20px;">Joshua • Irvin • Yordi • Donovan • Alan</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTROLES DE NAVEGACIÓN -->
+    <div class="controls">
+        <button onclick="previousSlide()">◀ Anterior</button>
+        <button onclick="nextSlide()">Siguiente ▶</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Navegación con teclado
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Navegación con clic
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('button') && !e.target.closest('.point')) {
+                if (e.clientX > window.innerWidth / 2) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
